@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { BookDTO } from './dto/book.dto';
+import { CustomHttpException } from './util/book.util';
 
 const bookStore: BookDTO[] = [];
 
@@ -21,7 +22,8 @@ export class AppService {
         book.releaseDate === dto.releaseDate,
     );
 
-    if (exists) return false;
+    if (exists)
+      throw CustomHttpException('Book already exists', HttpStatus.CONFLICT);
 
     const newBook = {
       ...dto,
@@ -29,6 +31,7 @@ export class AppService {
     };
 
     bookStore.push(newBook);
-    return newBook.id;
+
+    return newBook;
   }
 }

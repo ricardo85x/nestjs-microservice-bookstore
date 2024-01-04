@@ -9,14 +9,9 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @MessagePattern({ cmd: 'new_book' })
-  newBook(book: BookDTO): string {
+  newBook(book: BookDTO): BookDTO {
     delay(1000);
-    const result = this.appService.newBook(book);
-    if (!result) {
-      return 'Book already exists';
-    } else {
-      return result;
-    }
+    return this.appService.newBook(book);
   }
 
   @MessagePattern({ cmd: 'get_book' })
